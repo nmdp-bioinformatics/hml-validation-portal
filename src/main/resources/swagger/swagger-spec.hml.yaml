@@ -1,0 +1,46 @@
+swagger: '2.0'
+
+info:
+  version: "0.0.1"
+  title: hml validation api portal
+  description: hml and glstring validation service
+
+schemes:
+- https
+- http
+
+basePath: /v1
+
+paths:
+  /hml/validation:
+    post:
+      operationId: validate
+      consumes:
+      - application/xml
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: xml
+        required: true
+        schema:
+          type: string
+      - in: header
+        name: hmlgateway
+        type: boolean
+      - in: header
+        name: miring
+        type: boolean
+      - in: header
+        name: glstringSanity
+        type: boolean
+      - in: header
+        name: glstringValid
+        type: boolean
+      responses:
+        "200":
+          description: Return the json bundle
+          schema:
+            type: string
+        "500":
+          description: ErrorException

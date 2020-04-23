@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<hml version="1.0.1" xmlns="http://schemas.nmdp.org/spec/hml/1.0.1"
+xmlns:xs="http://www.w3.org/2001/XMLSchema-instance"
+xs:schemaLocation="http://schemas.nmdp.org/spec/hml/1.0.1 http://schemas.nmdp.org/spec/hml/1.0.1/hml-1.0.1.xsd"
+project-name="RES_CIBMTR_FHIR_DONOR">
+  <hmlid root="11184433" extension="256320MOMDONOR"/>
+  <reporting-center reporting-center-id="534"/>
+  <sample id="213587072" center-code="10151">
+   <property name="CRID" value="3916949"/>
+   <property name="recipient-relationship" value="Mother"/>
+   <collection-method>PBSC</collection-method>
+    <typing date="2018-07-26" gene-family="HLA">
+      <allele-assignment date="2018-07-26" allele-db="IMGT/HLA" allele-version="3.31.0">
+        <property name="SupplierOrderLineID" value="199688.2.1..1.83"/>
+        <glstring>HLA-A*03:01:01:01+HLA-A*30:01:01|HLA-A*02:01:01:01+HLA-A*30:01:01</glstring>
+      </allele-assignment>
+      <typing-method>
+        <sbt-ngs locus="HLA-A" test-id="PACBIOSequel" test-id-source="Be The Match"/>
+      </typing-method>
+    </typing>
+    <typing date="2018-07-26" gene-family="HLA">
+      <allele-assignment date="2018-07-26" allele-db="IMGT/HLA" allele-version="3.31.0">
+        <property name="SupplierOrderLineID" value="199688.2.1..2.83"/>
+        <glstring>HLA-B*07:02:01:01+HLA-B*13:02:01:01</glstring>
+      </allele-assignment>
+      <typing-method>
+        <sbt-ngs locus="HLA-B" test-id="PACBIOSequel" test-id-source="Be The Match"/>
+      </typing-method>
+    </typing>
+    <typing date="2018-07-26" gene-family="HLA">
+      <allele-assignment date="2018-07-26" allele-db="IMGT/HLA" allele-version="3.31.0">
+        <property name="SupplierOrderLineID" value="199688.2.1..3.83"/>
+        <glstring>HLA-C*06:02:01:01+HLA-C*07:02:01:03</glstring>
+      </allele-assignment>
+      <typing-method>
+        <sbt-ngs locus="HLA-C" test-id="PACBIOSequel" test-id-source="Be The Match"/>
+      </typing-method>
+    </typing>
+  </sample>
+ </hml>
