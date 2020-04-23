@@ -1,0 +1,16 @@
+<h2>Validation Options</h2>
+
+<ul class="options">
+  <li  *ngFor="let option of options" >
+    <input type="checkbox" name={{option.name}} (click)="onSelect(option, $event)"  [class.selected]="option === selectedOption">
+    <span class="badge">{{option.name}}</span>
+  </li>
+</ul>
+
+<div *ngIf="selectedOption && selectedOption.name.indexOf('glstring') !== -1 ">
+  <div>
+    <label>Input GlString:
+      <input [(ngModel)]="selectedOption.name"/>
+    </label>
+  </div>
+</div>

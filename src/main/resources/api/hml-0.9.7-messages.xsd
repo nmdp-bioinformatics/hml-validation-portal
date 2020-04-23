@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xs:schema xmlns="http://schemas.nmdp.org/spec/hml/0.9.7" 
+           xmlns:tns="http://schemas.nmdp.org/spec/hml/0.9.7"
+           xmlns:hml="http://schemas.nmdp.org/spec/hml/0.9.7" 
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://schemas.nmdp.org/spec/hml/0.9.7"
+           version="0.9.7">
+
+  <xs:include schemaLocation="http://schemas.nmdp.org/spec/hml/0.9.7/hml-0.9.7.xsd" />
+  <!-- xs:include schemaLocation="hml-0.9.7.xsd" / -->
+
+  <xs:element name="submitHMLRequest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="documentId" type="uuid" minOccurs="1" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation>
+              Requires a document ID to uniquely identify this SUBMISSION.  
+              All submissions must be universally unique. 
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="receive-reports" minOccurs="0" maxOccurs="1" type="xs:boolean" default="true" />
+        <xs:element name="run-interpretation" minOccurs="0" maxOccurs="1" type="xs:boolean" default="true" />
+        <xs:element ref="hml:hml" minOccurs="1" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation>
+              HML message payload.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+
+  <xs:element name="submitHMLResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="hmlid" type="xs:string" minOccurs="1" maxOccurs="1" />
+        <xs:element name="UUID" type="uuid" minOccurs="1" maxOccurs="1" />
+        <xs:element name="status" minOccurs="1" maxOccurs="1">
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:enumeration value="ACCEPTED" />
+              <xs:enumeration value="REJECTED" />
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+        <xs:element name="status-uri" type="xs:anyURI" minOccurs="0" maxOccurs="1" />
+        <xs:element name="timestamp" type="xs:dateTime" minOccurs="1" maxOccurs="1" />
+        <xs:element name="sample-count" type="xs:int" minOccurs="1" maxOccurs="1" />
+        <xs:element name="message" type="xs:string" minOccurs="1" maxOccurs="1" />
+        <xs:element ref="tns:errors" minOccurs="0" maxOccurs="1" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+
+  <xs:element name="validateHMLRequest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="hml:hml" minOccurs="1" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation>
+              HML message to test/validate.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+
+  <xs:element name="validateHMLResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="hmlid" type="xs:string" minOccurs="1"
+          maxOccurs="1" />
+        <xs:element name="status" minOccurs="1" maxOccurs="1">
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:enumeration value="VALID" />
+              <xs:enumeration value="INVALID" />
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+        <xs:element name="timestamp" type="xs:dateTime" minOccurs="1" maxOccurs="1" />
+        <xs:element name="sample-count" type="xs:int" minOccurs="1" maxOccurs="1" />
+        <xs:element name="message" type="xs:string" minOccurs="1" maxOccurs="1" />
+        <xs:element ref="tns:errors" minOccurs="0" maxOccurs="1" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+
+  <xs:element name="errors" id="errors">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="error" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:simpleContent>
+              <xs:extension base="xs:string">
+                <xs:attributeGroup ref="tns:sampleError" />
+                <xs:attributeGroup ref="tns:schemaError" />
+              </xs:extension>
+            </xs:simpleContent>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:attributeGroup name="sampleError">
+    <xs:attribute name="sample-id" type="xs:string" use="optional" />
+    <xs:attribute name="center-code" type="xs:string" use="optional" />
+  </xs:attributeGroup>
+
+  <xs:attributeGroup name="schemaError">
+    <xs:attribute name="line" type="xs:string" use="optional" />
+    <xs:attribute name="severity" type="xs:string" use="optional" />
+  </xs:attributeGroup>
+  
+  
+  <xs:simpleType name="uuid">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}" />
+    </xs:restriction>
+  </xs:simpleType>
+  
+</xs:schema>
