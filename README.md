@@ -28,3 +28,4 @@ These are broad items and more detailed descriptions will be added to these item
 
 Download the project using "git clone" command.
 To start the backend simply do "mvn clean install". And follow that by calling "java -jar hml-validation-portal.jar" from the target folder
+To start the UI, simply go to the hmlportaldashboard folder and run "ng serve --open" command in the terminal
