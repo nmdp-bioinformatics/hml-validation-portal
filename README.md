@@ -26,6 +26,7 @@ The Backend uses OpenJDk8 and Maven can be built by simply using "mvn clean inst
 These are broad items and more detailed descriptions will be added to these items in github (will be listed as issues).
 
 
-Download the project using "git clone" command.
-To start the backend simply do "mvn clean install". And follow that by calling "java -jar hml-validation-portal.jar" from the target folder
-To start the UI, simply go to the hmlportaldashboard folder and run "ng serve --open" command in the terminal
+Steps to run on your computer
+1. Download the project using "git clone" command. 
+2. To start the backend simply do "mvn clean install". And follow that by calling "java -jar hml-validation-portal.jar" from the target folder.
+3. To start the UI, simply go to the hmlportaldashboard folder and run "ng serve --open" command in the terminal
