@@ -6,12 +6,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ValidatorsComponent } from './validators/validators.component';
 import { UploaderComponent } from './uploader/uploader.component';
+import { ResponseDisplayComponent } from './response-display/response-display.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ValidatorsComponent,
-    UploaderComponent
+    UploaderComponent,
+    ResponseDisplayComponent
   ],
   imports: [
     BrowserModule,

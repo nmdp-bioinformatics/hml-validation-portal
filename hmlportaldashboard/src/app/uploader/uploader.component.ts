@@ -11,7 +11,8 @@ import {ValidatorsComponent} from '../validators/validators.component';
 export class UploaderComponent implements OnInit {
 
   uploadForm: FormGroup;
-  constructor(private uploaderService: UploadService, private formBuilder: FormBuilder, private validatorComponent: ValidatorsComponent) {}
+  private fileName;
+  constructor(private uploaderService: UploadService, private formBuilder: FormBuilder) {}
 
   ngOnInit() {
     this.uploadForm = this.formBuilder.group({
@@ -20,9 +21,15 @@ export class UploaderComponent implements OnInit {
   }
 
   onSubmit() {
-    const formData = new FormData();
-    formData.append('file', this.uploadForm.get('profile').value);
-    this.uploaderService.upload(formData);
+    const fileReader = new FileReader();
+    const file = this.uploadForm.get('profile').value;
+    this.fileName = file.name;
+    console.log("Filename = "+this.fileName);
+    fileReader.readAsText(file);
+    fileReader.onload = (e) => {
+      console.log("reader = " + fileReader.result);
+    }
+    this.uploaderService.upload(file);
   }
 
   onFileSelect(event) {
