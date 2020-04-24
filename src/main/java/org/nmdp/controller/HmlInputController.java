@@ -1,9 +1,7 @@
 package org.nmdp.controller;
 
-import org.apache.cxf.common.util.StringUtils;
-import org.nmdp.b2b.spec.ws.api101.Allele;
-import org.nmdp.mac.client.jaxrs.JaxrsAlleleCodeService;
-import org.nmdp.mac.client.model.AlleleCodeService;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.sun.org.apache.xerces.internal.parsers.DOMParser;
 import org.nmdp.miring.MiringReport;
 import io.swagger.annotations.ApiParam;
 import io.swagger.api.hml.HmlApi;
@@ -13,9 +11,10 @@ import org.springframework.http.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.xml.transform.StringSource;
 
-import javax.validation.Valid;
+import org.nmdp.utils.TypingInfo;
 import javax.xml.bind.JAXBContext;
 import java.net.URI;
 
@@ -70,26 +69,29 @@ public class HmlInputController implements HmlApi
                         .unmarshal(new StringSource(response.getBody()), MiringReport.class)
                         .getValue();
                 aSb.append("\n\nMiring Validation result - " + aMiringReport.getMiringCompliant());
-//                aSb.append("\n\nMiring Errors - " + aMiringReport.getMiringValidatio)
-//                return new ResponseEntity<>(response.getBody(), HttpStatus.OK );
             }
             if (glstringValid.booleanValue())
             {
-                String resourceUrl = "https://hmldev.nmdp.org/mac/";
-                AlleleCodeService aMac = new JaxrsAlleleCodeService(resourceUrl);
-                String aImgtHlaRelease = "3.29.0";
-                RequestEntity<String> request =
-                        RequestEntity.post(new URI(resourceUrl))
-                                .header("--data-urlencode")
-                                //  .header("Accept", "application/xml")
-                                .body("xml="+xml);
-                boolean isValidGlString = isValidGlString(xml,aMac,aImgtHlaRelease);
+                XmlMapper xmlMapper = new XmlMapper();
+                TypingInfo aTypingInfo = xmlMapper.readValue(xml, TypingInfo.class);
+                String resourceUrl = "https://hmldev.nmdp.org/mac/api/encode";
+                //TODO: The temp values here will be updated in the future with an option for User to input this information
+                String trialRun = "false";
+                UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(resourceUrl)
+                        .queryParam("trialRun",trialRun)
+                        .queryParam("email", aTypingInfo.getEmail())
+                        .queryParam("imgtHlaRelease", aTypingInfo.getVersion());
 
+                RequestEntity<String> request =
+                        RequestEntity.post(new URI(uriBuilder.toUriString()))
+                                .header("--data-raw")
+                                .body(aTypingInfo.getGlstring());
+                ResponseEntity<String> response = restTemplate.exchange(request, String.class);
+                boolean isValidGlString = response.getBody().contains("invalid") ? false : true;
                 aSb.append("\n\nGlString validity - " + (isValidGlString ? "glstring is valid" : "glstring is invalid"));
-//                return new ResponseEntity<>(isValidGlString? "", HttpStatus.OK );
             }
 
-            if (!hmlgateway && !glstringSanity && !miring && !glstringValid)
+            if (!hmlgateway.booleanValue() && !glstringSanity.booleanValue() && !miring.booleanValue() && !glstringValid.booleanValue())
             {
                 return new ResponseEntity<>("No Validator Selected", HttpStatus.NOT_IMPLEMENTED);
             }
@@ -98,25 +100,5 @@ public class HmlInputController implements HmlApi
         {
             return new ResponseEntity<>("ERRORS ENCOUNTERED", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-    }
-
-    private boolean isValidGlString(String theGlString, AlleleCodeService theService, String theVersion)
-    {
-        return !StringUtils.isEmpty(testEncode(theGlString, theService, theVersion));
-    }
-
-    private String testEncode(String glstring, AlleleCodeService theService, String theVersion) {
-        String myMacEncodedString = "";
-        try {
-            myMacEncodedString = theService.encode(theVersion, glstring);
-
-        } catch (IllegalArgumentException e) {
-            // Notify user to correct input values.
-            e.printStackTrace();
-        } catch (RuntimeException e) {
-            // System or network issue.
-            e.printStackTrace();
-        }
-        return myMacEncodedString;
     }
 }
